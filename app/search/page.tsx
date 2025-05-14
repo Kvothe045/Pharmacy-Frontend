@@ -1,7 +1,7 @@
 "use client";
 
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { getProducts, getCategories } from '@/lib/api';
 import SearchResults from '@/components/search-result';
 import Navbar from '@/components/navbar';
@@ -47,15 +47,17 @@ export default function SearchPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <SearchResults
-          allProducts={products}
-          categories={categories}
-          query={query}
-        />
-      </div>
-    </main>
+    <Suspense fallback={<div className="text-center py-12">Loading search results...</div>}>
+      <main className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <SearchResults
+            allProducts={products}
+            categories={categories}
+            query={query}
+          />
+        </div>
+      </main>
+    </Suspense>
   );
 }
