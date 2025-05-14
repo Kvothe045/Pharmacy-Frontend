@@ -1,7 +1,7 @@
 import { Product, Category, Billboard } from '@/types/types';
 
 const STORE_ID = process.env.STORE_ID || "9163e59b-5994-48da-801f-489b695929ad";
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://pharma-admin-bflbbgkuh-kvothes-projects-c1e46e5f.vercel.app/api";
 
 /**
  * Fetch all products from the API
