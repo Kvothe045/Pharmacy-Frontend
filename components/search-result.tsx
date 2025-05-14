@@ -8,6 +8,7 @@ import { Product, Category } from '@/types/types'
 interface SearchResultsProps {
   allProducts: Product[]
   categories: Category[]
+  query?: string
 }
 
 export default function SearchResults({ allProducts, categories }: SearchResultsProps) {
