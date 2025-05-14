@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
 import ProductCard from '@/components/product-card'
 import { Product, Category } from '@/types/types'
+import { useSearchParams } from 'next/navigation';
 
 interface SearchResultsProps {
   allProducts: Product[]
@@ -11,14 +11,15 @@ interface SearchResultsProps {
   query?: string
 }
 
-export default function SearchResults({ allProducts, categories }: SearchResultsProps) {
+// Create a component that uses useSearchParams
+function SearchResultsContent({ allProducts, categories }: SearchResultsProps) {
   const searchParams = useSearchParams()
   const query = searchParams.get('q') || ''
   
   const [matchedProducts, setMatchedProducts] = useState<Product[]>([])
   const [matchedCategory, setMatchedCategory] = useState<Category | null>(null)
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
-  
+
   useEffect(() => {
     if (!query) {
       setMatchedProducts([])
@@ -127,4 +128,13 @@ export default function SearchResults({ allProducts, categories }: SearchResults
       )}
     </div>
   )
+}
+
+// Main component with Suspense boundary
+export default function SearchResults({ allProducts, categories }: SearchResultsProps) {
+  return (
+    <Suspense fallback={<div className="text-center py-4">Loading search results...</div>}>
+      <SearchResultsContent allProducts={allProducts} categories={categories} />
+    </Suspense>
+  );
 }

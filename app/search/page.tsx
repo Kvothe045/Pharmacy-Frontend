@@ -1,16 +1,13 @@
 "use client";
 
 import { Suspense, useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { getProducts, getCategories } from '@/lib/api';
-import SearchResults from '@/components/search-result';
 import Navbar from '@/components/navbar';
+import { getProducts, getCategories } from '@/lib/api';
 import { Product, Category } from '@/types/types';
+import SearchResults from '@/components/search-result';
 
-export default function SearchPage() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get('q') || '';
-
+// Create a separate component that uses useSearchParams
+function SearchPageContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,27 +34,28 @@ export default function SearchPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="text-center py-12">Loading...</div>
-        </div>
-      </main>
+      <div className="text-center py-12">Loading...</div>
     );
   }
 
   return (
-    <Suspense fallback={<div className="text-center py-12">Loading search results...</div>}>
-      <main className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <SearchResults
-            allProducts={products}
-            categories={categories}
-            query={query}
-          />
-        </div>
-      </main>
-    </Suspense>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <SearchResults
+        allProducts={products}
+        categories={categories}
+      />
+    </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function SearchPage() {
+  return (
+    <main className="min-h-screen bg-gray-50">
+      <Navbar />
+      <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8 text-center py-12">Loading search results...</div>}>
+        <SearchPageContent />
+      </Suspense>
+    </main>
   );
 }
