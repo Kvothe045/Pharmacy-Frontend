@@ -4,13 +4,13 @@ import ProductCard from '@/components/product-card'
 import CategorySection from '@/components/category-section'
 import Navbar from '@/components/navbar'
 
-type CategoryPageProps = {
+export default async function CategoryPage({
+  params,
+}: {
   params: {
     categoryId: string
   }
-}
-
-export default async function CategoryPage({ params }: CategoryPageProps) {
+}) {
   const [products, categories] = await Promise.all([
     getProducts(),
     getCategories()
