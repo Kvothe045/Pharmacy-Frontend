@@ -1,12 +1,16 @@
-// app/category/[categoryId]/page.tsx
-
 import { getProducts, getCategories } from '@/lib/api'
 import { notFound } from 'next/navigation'
 import ProductCard from '@/components/product-card'
 import CategorySection from '@/components/category-section'
 import Navbar from '@/components/navbar'
 
-export default async function CategoryPage({ params }: { params: { categoryId: string } }) {
+type CategoryPageProps = {
+  params: {
+    categoryId: string
+  }
+}
+
+export default async function CategoryPage({ params }: CategoryPageProps) {
   const [products, categories] = await Promise.all([
     getProducts(),
     getCategories()
@@ -15,7 +19,6 @@ export default async function CategoryPage({ params }: { params: { categoryId: s
   const category = categories.find(cat => cat.id === params.categoryId)
   if (!category) return notFound()
 
-  // Get products in the selected category
   const categoryProducts = products.filter(prod => prod.category?.id === params.categoryId)
 
   return (
